@@ -40,11 +40,13 @@ struct DynamicNotchApp: App {
         // The AtollUpdaterDelegate overrides the feed URL at runtime
         // based on the user's selected update channel.
         updaterController = SPUStandardUpdaterController(
-            startingUpdater: !AppRuntimeEnvironment.isUITesting,
+            startingUpdater: !AppRuntimeEnvironment.isTesting,
             updaterDelegate: updaterDelegate, userDriverDelegate: nil)
 
         // Initialize the settings window controller with the updater controller
-        SettingsWindowController.shared.setUpdaterController(updaterController)
+        if !AppRuntimeEnvironment.isTesting {
+            SettingsWindowController.shared.setUpdaterController(updaterController)
+        }
     }
 
     var body: some Scene {
@@ -103,27 +105,28 @@ extension AppDelegate {
     }
 }
 
+@MainActor
 class AppDelegate: NSObject, NSApplicationDelegate {
     var statusItem: NSStatusItem?
     var windows: [NSScreen: NSWindow] = [:]
     var viewModels: [NSScreen: DynamicIslandViewModel] = [:]
     var window: NSWindow?
-    let vm: DynamicIslandViewModel = .init()
-    @ObservedObject var coordinator = DynamicIslandViewCoordinator.shared
+    lazy var vm: DynamicIslandViewModel = .init()
+    lazy var coordinator = DynamicIslandViewCoordinator.shared
     var whatsNewWindow: NSWindow?
     var timer: Timer?
-    let calendarManager = CalendarManager.shared
-    let webcamManager = WebcamManager.shared
-    let dndManager = DoNotDisturbManager.shared  // NEW: DND detection
-    let bluetoothAudioManager = BluetoothAudioManager.shared  // NEW: Bluetooth audio detection
-    let idleAnimationManager = IdleAnimationManager.shared  // NEW: Custom idle animations
-    let downloadManager = DownloadManager.shared  // NEW: Chromium downloads detection
-    let lockScreenPanelManager = LockScreenPanelManager.shared  // NEW: Lock screen music panel
-    let mediaControlsStateCoordinator = MediaControlsStateCoordinator.shared
-    let systemTimerBridge = SystemTimerBridge.shared
-    let extensionXPCServiceHost = ExtensionXPCServiceHost.shared
-    let extensionRPCServer = ExtensionRPCServer.shared
-    let shortcutLauncherService = AtollShortcutLauncherService.shared
+    lazy var calendarManager = CalendarManager.shared
+    lazy var webcamManager = WebcamManager.shared
+    lazy var dndManager = DoNotDisturbManager.shared  // NEW: DND detection
+    lazy var bluetoothAudioManager = BluetoothAudioManager.shared  // NEW: Bluetooth audio detection
+    lazy var idleAnimationManager = IdleAnimationManager.shared  // NEW: Custom idle animations
+    lazy var downloadManager = DownloadManager.shared  // NEW: Chromium downloads detection
+    lazy var lockScreenPanelManager = LockScreenPanelManager.shared  // NEW: Lock screen music panel
+    lazy var mediaControlsStateCoordinator = MediaControlsStateCoordinator.shared
+    lazy var systemTimerBridge = SystemTimerBridge.shared
+    lazy var extensionXPCServiceHost = ExtensionXPCServiceHost.shared
+    lazy var extensionRPCServer = ExtensionRPCServer.shared
+    lazy var shortcutLauncherService = AtollShortcutLauncherService.shared
     var closeNotchWorkItem: DispatchWorkItem?
     private var previousScreens: [NSScreen]?
     private var onboardingWindowController: NSWindowController?
@@ -168,6 +171,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
+        if AppRuntimeEnvironment.isUnitTesting { return .terminateNow }
+
         let recorder = AtollRecordingCoordinator.shared
         let needsLauncherShutdown = shortcutLauncherService.requiresShutdown
         guard recorder.isBusy || needsLauncherShutdown else { return .terminateNow }
@@ -196,6 +201,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationDidBecomeActive(_ notification: Notification) {
+        if AppRuntimeEnvironment.isUnitTesting { return }
         installTopMenuItemsIfNeeded()
     }
 
@@ -312,6 +318,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationWillTerminate(_ notification: Notification) {
+        if AppRuntimeEnvironment.isUnitTesting { return }
+
         let userInfo: [String: Any] = [
             AtollDistributedNotifications.UserInfoKey.sourcePID: NSNumber(value: ProcessInfo.processInfo.processIdentifier)
         ]
@@ -711,6 +719,29 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func applicationDidFinishLaunching(_ notification: Notification) {
+        // Hosted unit tests only need the application binary loaded. Starting
+        // global monitors, XPC listeners, windows, or permission probes here
+        // can prevent XCTest from connecting on headless CI runners.
+        if AppRuntimeEnvironment.isUnitTesting { return }
+
+        // Preserve the production launch order while keeping construction out
+        // of the unit-test host process. Several managers start observers from
+        // their initializers, so they must remain lazy until after the guard.
+        _ = vm
+        _ = coordinator
+        _ = calendarManager
+        _ = webcamManager
+        _ = dndManager
+        _ = bluetoothAudioManager
+        _ = idleAnimationManager
+        _ = downloadManager
+        _ = lockScreenPanelManager
+        _ = mediaControlsStateCoordinator
+        _ = systemTimerBridge
+        _ = extensionXPCServiceHost
+        _ = extensionRPCServer
+        _ = shortcutLauncherService
+
         let userInfo: [String: Any] = [
             AtollDistributedNotifications.UserInfoKey.sourcePID: NSNumber(value: ProcessInfo.processInfo.processIdentifier)
         ]

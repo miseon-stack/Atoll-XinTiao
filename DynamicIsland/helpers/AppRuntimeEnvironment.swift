@@ -26,6 +26,7 @@ enum AppRuntimeEnvironment {
     static let isTesting: Bool = {
         let environment = ProcessInfo.processInfo.environment
         return isUITesting
+            || environment["ATOLL_UNIT_TESTING"] == "1"
             || (CommandLine.arguments.contains("-NSTreatUnknownArgumentsAsOpen")
                 && CommandLine.arguments.contains("-ApplePersistenceIgnoreState"))
             || NSClassFromString("XCTestCase") != nil
@@ -34,6 +35,13 @@ enum AppRuntimeEnvironment {
             || environment["XCTestSessionIdentifier"] != nil
             || environment["XCInjectBundleInto"] != nil
             || environment.keys.contains { $0.hasPrefix("XCTest") }
+    }()
+
+    /// `true` only for the XCTest host process. The shared scheme sets the
+    /// explicit environment flag so hosted unit tests remain deterministic on
+    /// headless GitHub runners where XCTest injection variables arrive late.
+    static let isUnitTesting: Bool = {
+        !isUITesting && isTesting
     }()
 
     /// `true` only in DEBUG builds launched by XCUITest (`--uitesting`); always false in Release.
