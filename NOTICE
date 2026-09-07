@@ -1,0 +1,37 @@
+Atoll (DynamicIsland) - NOTICE
+
+Atoll × 薪跳 modifications
+
+Copyright (C) 2026 miseon-stack
+https://github.com/miseon-stack/Atoll-XinTiao
+
+This repository contains a modified version of Atoll that integrates
+live earnings, work-calendar, task/event, capture, recording, and
+configurable-shortcut features. These project-specific modifications
+are maintained by miseon-stack and distributed under GNU GPL v3.0.
+
+Original Atoll source and project history:
+https://github.com/Ebullioscopic/Atoll
+
+ShortcutLauncher 0.6.0
+
+The ShortcutLauncher source under Vendor/ShortcutLauncher and its Atoll
+integration are Copyright (C) 2026 miseon-stack. ShortcutLauncher is
+distributed as part of this repository under GNU GPL v3.0. Its license
+text is available in Vendor/ShortcutLauncher/LICENSE; the repository-wide
+license text is available in LICENSE. The HostDemo and integration test
+fixture are source-level verification products and are not distributed as
+a second macOS application by Atoll × 薪跳.
+
+This product includes software derived from the boring.notch project,
+modified and adapted for Atoll (DynamicIsland). The boring.notch project
+is licensed under the GNU General Public License v3.0.
+
+All copyrights and notices belonging to the original Atoll project and
+other upstream or third-party components remain with their respective
+holders.
+
+FingerprintScan.json is the "Fingerprint Scan" animation by Eddy Gann,
+downloaded from LottieFiles and used under the Lottie Simple License:
+https://lottiefiles.com/free-animation/fingerprint-scan-VQf6EWRtkS
+https://lottiefiles.com/page/license

@@ -1,0 +1,97 @@
+name: Main CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+# The public CI only needs to read repository contents. Keep this explicit so a
+# future repository-level default cannot silently grant write access.
+permissions:
+  contents: read
+
+concurrency:
+  group: main-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Verify package and unsigned host
+    runs-on: macos-26
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout repository
+        # actions/checkout v4.2.2, pinned for a reproducible public workflow.
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+
+      - name: Report toolchain
+        run: |
+          sw_vers
+          xcodebuild -version
+          swift --version
+
+      - name: Verify ShortcutLauncher delivery
+        working-directory: Vendor/ShortcutLauncher
+        run: ./scripts/verify-delivery.sh
+
+      - name: Run repository regression tests
+        run: python3 -m unittest discover -s tests -p 'test_*.py'
+
+      - name: Ensure Metal toolchain is available
+        run: |
+          sudo xcodebuild -runFirstLaunch
+          if xcrun -f metal >/dev/null 2>&1; then
+            exit 0
+          fi
+
+          downloaded=false
+          for attempt in 1 2 3 4 5; do
+            if sudo xcodebuild -downloadComponent MetalToolchain; then
+              downloaded=true
+              break
+            fi
+            echo "Metal Toolchain download attempt ${attempt} failed."
+            sleep 10
+          done
+
+          if [ "$downloaded" != true ] && ! xcrun -f metal >/dev/null 2>&1; then
+            echo "::error::Metal Toolchain is unavailable after five download attempts."
+            exit 1
+          fi
+
+      - name: Resolve host dependencies
+        run: |
+          xcodebuild -resolvePackageDependencies \
+            -project DynamicIsland.xcodeproj \
+            -scheme DynamicIsland
+
+      - name: Build unsigned Debug host
+        run: |
+          xcodebuild build \
+            -project DynamicIsland.xcodeproj \
+            -scheme DynamicIsland \
+            -configuration Debug \
+            -destination 'platform=macOS' \
+            -derivedDataPath "$RUNNER_TEMP/AtollDerivedData" \
+            -disableAutomaticPackageResolution \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO
+
+      - name: Test unsigned Debug host
+        run: |
+          xcodebuild test \
+            -project DynamicIsland.xcodeproj \
+            -scheme DynamicIsland \
+            -configuration Debug \
+            -destination 'platform=macOS' \
+            -derivedDataPath "$RUNNER_TEMP/AtollDerivedData" \
+            -disableAutomaticPackageResolution \
+            -only-testing:DynamicIslandTests \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO

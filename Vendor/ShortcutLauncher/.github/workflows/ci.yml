@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  delivery-verification:
+    name: Source delivery / macOS 15
+    runs-on: macos-15
+    timeout-minutes: 30
+
+    steps:
+      # actions/checkout v4.2.2, pinned to an immutable commit.
+      - name: Check out the tested revision
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Record the macOS toolchain
+        run: |
+          set -euo pipefail
+          sw_vers
+          xcodebuild -version
+          swift --version
+
+      - name: Package and verify the public source delivery
+        run: |
+          set -euo pipefail
+
+          delivery_version="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' HostDemo/Info.plist)"
+          delivery_build="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleVersion' HostDemo/Info.plist)"
+          output_parent="$(mktemp -d "$RUNNER_TEMP/shortcut-launcher-ci-output.XXXXXX")"
+
+          # package-source.sh owns the public allowlist and invokes the
+          # history-free, no-UI, no-public-network verify-delivery.sh gate.
+          SHORTCUT_LAUNCHER_VERSION="$delivery_version" \
+          SHORTCUT_LAUNCHER_BUILD_VERSION="$delivery_build" \
+            /bin/zsh ./scripts/package-source.sh "$output_parent"
+
+      # There is intentionally no dependency or build cache. The package has
+      # no external dependencies, and a clean source-delivery build is the gate.

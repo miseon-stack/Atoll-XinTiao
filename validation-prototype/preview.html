@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Atoll × 薪跳一期交互验收台</title>
+  <link rel="stylesheet" href="app/globals.css">
+  <style>
+    .modal-hidden{display:none}.control-line{display:flex;justify-content:space-between;align-items:center;margin:10px 0;font-size:11px}.control-line input{accent-color:#76f6a4}.notch .notch-open{display:block}.setup input[type=number]{background:#090b10;color:#fff;border:1px solid #303644;border-radius:8px;padding:9px;width:145px}.setup select{background:#090b10;color:#fff;border:1px solid #303644;border-radius:8px;padding:9px}
+    .notch.open{height:390px}.atoll-tabs{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-bottom:11px;border-bottom:1px solid #222832;padding-bottom:9px}.atoll-tabs button{display:flex;flex-direction:column;align-items:center;gap:3px;border:0;background:transparent;color:#727b8c;font-size:14px;padding:5px}.atoll-tabs button span{font-size:8px}.atoll-tabs button.active{background:#1d2525;color:#8ef2ae}.original-view{min-height:245px;border:1px solid #29303b;background:#0e1118;border-radius:17px;display:flex;align-items:center;gap:15px;padding:25px;text-align:left}.original-view[hidden]{display:none}.original-icon{width:55px;height:55px;border-radius:16px;background:#1a2430;color:#8abaff;display:grid;place-items:center;font-size:25px}.original-view small{color:#697486;font-size:8px;letter-spacing:.12em}.original-view h3{margin:5px 0;font-size:20px}.original-view p{color:#7f899a;font-size:10px;margin:0}.original-view>button{margin-left:auto;font-size:9px}.mac{height:610px}
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <div><p class="eyebrow">ATOLL × 薪跳 · 一期</p><h1>无 Xcode 交互验收台</h1><span>先验证流程、布局和状态规则；Xcode 安装后再补真实 macOS 验收。</span></div>
+    <div class="header-actions"><b class="online">● 原型运行中</b><button id="resetSetup">重新体验首次引导</button></div>
+  </header>
+  <div class="workspace">
+    <aside class="panel controls">
+      <div class="panel-title"><b>模拟控制台</b><label class="control-line">实时跳动　<input id="running" type="checkbox" checked></label></div>
+      <section class="block"><label>快速场景</label><div class="scene-grid"><button data-scene="before">上班前</button><button class="active" data-scene="working">工作中</button><button data-scene="lunch">午休</button><button data-scene="after">下班后</button><button data-scene="rest">休息日</button></div></section>
+      <section class="block"><label>模拟时间</label><div class="time-label" id="timeLabel">10:36</div><input id="time" type="range" min="420" max="1200" value="636"></section>
+      <section class="block"><label class="control-line">播放媒体<input id="media" type="checkbox" checked></label><label class="control-line">隐私模式<input id="privacy" type="checkbox"></label><label class="control-line">模拟锁屏<input id="locked" type="checkbox"></label><label class="control-line">启用实时收益<input id="enabled" type="checkbox" checked></label></section>
+      <section class="block"><div class="stat"><span>本月工作日</span><b id="monthDays">21 天</b></div><div class="stat"><span>预计日收益</span><b id="daily">1000.00</b></div><div class="stat"><span>当前状态</span><b id="status">增长中</b></div></section>
+    </aside>
+    <section class="preview">
+      <div class="section-title"><b><i>01</i> 刘海状态预览</b><span>把鼠标移入刘海，或点击刘海进行展开。</span></div>
+      <div class="mac">
+        <div class="menubar"><span>　Atoll</span><span id="menuTime">10:36　⌁　100%</span></div>
+        <div class="notch" id="notch" role="button" tabindex="0">
+          <div class="notch-closed"><div class="left" id="mediaLeft"><div class="art">A</div><div class="wave"><i></i><i></i><i></i><i></i></div></div><div class="camera"><i></i></div><div class="right"><b id="notchAmount">200.00</b><small id="hiddenDot" hidden>●</small></div></div>
+          <div class="notch-open">
+            <nav class="atoll-tabs" aria-label="Atoll 功能导航"><button class="active" data-tab="home">⌂<span>Home</span></button><button data-tab="timer">◷<span>计时器</span></button><button data-tab="calendar">▦<span>日历</span></button><button data-tab="clipboard">▣<span>剪贴板</span></button><button data-tab="notes">≡<span>便笺</span></button></nav>
+            <div id="homeTab"><article class="earnings" id="earningsCard"><div><b>↗　实时收益</b><small id="cardStatus">增长中</small></div><h2 id="money">¥200.00</h2><h3 id="privateMessage" hidden>◉　隐私模式下已隐藏</h3><div class="progress"><i id="progress" style="width:20%"></i></div><footer><span>今日已赚</span><span id="percent">20%</span></footer></article><article class="media" id="mediaCard"><div class="big-art">A</div><div><small>正在播放</small><b>Focus Flow</b><span>Atoll Sessions</span></div><button>Ⅱ</button></article></div>
+            <div class="original-view" id="originalTab" hidden><div class="original-icon" id="originalIcon">◷</div><div><small>ATOLL 原有功能</small><h3 id="originalTitle">计时器</h3><p id="originalDescription">计时器预设、倒计时与控制区域保持原样。</p></div><button>打开功能</button></div>
+          </div>
+        </div>
+        <div class="desktop"><small>PRODUCT REVIEW</small><h2>把工作时间，变成看得见的进度。</h2><p>浏览器模拟不会读取或保存你的真实工资。</p></div>
+        <div class="lock modal-hidden" id="lockLayer"><b>⌾</b><h3>屏幕已锁定</h3><span>收益金额自动隐藏</span></div>
+      </div>
+      <div class="rules"><div id="ruleWork"><i>✓</i>工作日常驻</div><div id="ruleMedia"><i>✓</i>媒体左、数字右</div><div id="rulePrivate"><i>✓</i>敏感状态隐藏</div><div id="ruleOriginal"><i>✓</i>恢复原 Atoll</div></div>
+    </section>
+    <aside class="panel review"><div class="section-title"><b><i>02</i> 当前验收判断</b></div><h3 id="resultTitle">金额正常展示</h3><p>关闭态只出现数字；货币符号仅在展开的 Home 卡片中显示。</p><div class="check"><i class="passed">✓</i>关闭态无货币符号</div><div class="check"><i class="passed">✓</i>金额固定两位小数</div><div class="check"><i id="checkLunch">✓</i>午休期间冻结</div><div class="check"><i id="checkPrivate">✓</i>隐私或锁屏隐藏</div><div class="check"><i id="checkOriginal">✓</i>休息日或关闭时不占位</div><div class="warning"><b>此处不能验证</b><p>实体刘海尺寸、系统权限、睡眠唤醒、性能和真实系统活动优先级。</p></div></aside>
+  </div>
+  <div class="backdrop" id="setupModal"><section class="setup">
+    <div class="setup-head"><i>↗</i><div><p class="eyebrow">首次启动 · 可跳过</p><h2>设置实时收益</h2><span>填写薪资和工作时间，Atoll 会在刘海中实时显示今天的收益。</span></div></div>
+    <div class="tabs"><button class="active" data-mode="monthly">月薪</button><button data-mode="daily">日薪</button><button data-mode="hourly">时薪</button></div>
+    <div class="row"><label>薪资</label><div><input id="salary" type="number" value="21000" min="0"><select id="currency"><option>CNY</option><option>USD</option><option>EUR</option><option>JPY</option></select></div></div>
+    <label class="field-title">工作日</label><div class="days"><button data-day="0">日</button><button class="active" data-day="1">一</button><button class="active" data-day="2">二</button><button class="active" data-day="3">三</button><button class="active" data-day="4">四</button><button class="active" data-day="5">五</button><button data-day="6">六</button></div>
+    <div class="time-fields"><label>上班时间<input id="start" type="time" value="09:00"></label><label>下班时间<input id="end" type="time" value="18:00"></label></div>
+    <label class="control-line">午休期间暂停增长<input id="lunchOn" type="checkbox" checked></label><div class="time-fields" id="lunchFields"><label>午休开始<input id="lunchStart" type="time" value="12:00"></label><label>午休结束<input id="lunchEnd" type="time" value="13:00"></label></div>
+    <div class="actions"><button id="skip">暂不设置</button><button class="primary" id="save">启用并查看效果</button></div>
+  </section></div>
+</main>
+<script>
+const $=id=>document.getElementById(id), state={scene:'working',mode:'monthly',workdays:[1,2,3,4,5]};
+const m=t=>{const [h,n]=t.split(':').map(Number);return h*60+n}, c=v=>`${String(Math.floor(v/60)).padStart(2,'0')}:${String(v%60).padStart(2,'0')}`;
+function calc(){const a=m($('start').value),b=m($('end').value),la=m($('lunchStart').value),lb=m($('lunchEnd').value),lunch=$('lunchOn').checked?lb-la:0,paid=Math.max(1,b-a-lunch),t=+$('time').value;let days=0;for(let d=1;d<=31;d++)if(state.workdays.includes(new Date(2026,7,d).getDay()))days++;const salary=+$('salary').value,daily=state.mode==='monthly'?salary/Math.max(1,days):state.mode==='daily'?salary:salary*paid/60;let status='未上班',elapsed=0;if(state.scene==='rest')status='休息日';else if(t<a)status='未上班';else if($('lunchOn').checked&&t>=la&&t<lb){status='午休暂停';elapsed=la-a}else if(t<b){status='增长中';elapsed=t-a-($('lunchOn').checked&&t>=lb?lunch:0)}else{status='今日完成';elapsed=paid}const p=state.scene==='rest'?0:Math.max(0,Math.min(1,elapsed/paid));return{days,daily,status,p,earned:daily*p}}
+function render(){const r=calc(),eligible=$('enabled').checked&&state.scene!=='rest',hidden=$('privacy').checked||$('locked').checked,visible=eligible&&!hidden,num=r.earned.toLocaleString('zh-CN',{minimumFractionDigits:2,maximumFractionDigits:2});$('timeLabel').textContent=state.scene==='rest'?'星期日':c(+$('time').value);$('menuTime').textContent=c(+$('time').value)+'　⌁　100%';$('monthDays').textContent=r.days+' 天';$('daily').textContent=r.daily.toFixed(2);$('status').textContent=r.status;$('notchAmount').textContent=num;$('notchAmount').hidden=!visible;$('hiddenDot').hidden=visible||!eligible;$('earningsCard').hidden=!eligible;$('cardStatus').textContent=visible?r.status:'已隐藏';$('money').hidden=!visible;$('money').textContent=new Intl.NumberFormat('zh-CN',{style:'currency',currency:$('currency').value}).format(r.earned);$('privateMessage').hidden=visible;$('privateMessage').textContent='◉　'+($('locked').checked?'锁屏状态下已隐藏':'隐私模式下已隐藏');$('progress').style.width=(r.p*100)+'%';$('percent').textContent=Math.round(r.p*100)+'%';$('mediaLeft').hidden=!$('media').checked;$('mediaCard').innerHTML=$('media').checked?'<div class="big-art">A</div><div><small>正在播放</small><b>Focus Flow</b><span>Atoll Sessions</span></div><button>Ⅱ</button>':'<div class="empty">Atoll 原 Home 内容区域</div>';$('lockLayer').classList.toggle('modal-hidden',!$('locked').checked);$('resultTitle').textContent=visible?'金额正常展示':eligible?'金额已安全隐藏':'使用原 Atoll 状态';[['ruleWork',eligible],['ruleMedia',eligible&&$('media').checked],['rulePrivate',hidden],['ruleOriginal',!eligible]].forEach(([id,ok])=>$(id).classList.toggle('passed',ok));$('checkLunch').classList.toggle('passed',r.status==='午休暂停');$('checkPrivate').classList.toggle('passed',hidden);$('checkOriginal').classList.toggle('passed',!eligible)}
+document.querySelectorAll('[data-scene]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-scene]').forEach(x=>x.classList.remove('active'));b.classList.add('active');state.scene=b.dataset.scene;const times={before:500,working:636,lunch:750,after:1100};if(times[state.scene])$('time').value=times[state.scene];render()});document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-mode]').forEach(x=>x.classList.remove('active'));b.classList.add('active');state.mode=b.dataset.mode;render()});document.querySelectorAll('[data-day]').forEach(b=>b.onclick=()=>{const d=+b.dataset.day;b.classList.toggle('active');state.workdays=b.classList.contains('active')?[...new Set([...state.workdays,d])]:state.workdays.filter(x=>x!==d);render()});document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=e=>{e.stopPropagation();document.querySelectorAll('[data-tab]').forEach(x=>x.classList.remove('active'));b.classList.add('active');const tab=b.dataset.tab,isHome=tab==='home',content={timer:['◷','计时器','计时器预设、倒计时与控制区域保持原样。'],calendar:['▦','日历','日程列表、日期浏览与日历操作保持原样。'],clipboard:['▣','剪贴板','剪贴板历史、搜索与复制操作保持原样。'],notes:['≡','便笺','便笺列表、编辑与保存区域保持原样。']}[tab];$('homeTab').hidden=!isHome;$('originalTab').hidden=isHome;if(content){$('originalIcon').textContent=content[0];$('originalTitle').textContent=content[1];$('originalDescription').textContent=content[2]}});['time','media','privacy','locked','enabled','salary','currency','start','end','lunchOn','lunchStart','lunchEnd'].forEach(id=>$(id).oninput=render);$('lunchOn').onchange=()=>{$('lunchFields').hidden=!$('lunchOn').checked;render()};$('notch').onmouseenter=()=>$('notch').classList.add('open');$('notch').onmouseleave=()=>$('notch').classList.remove('open');$('notch').onclick=()=>$('notch').classList.toggle('open');$('resetSetup').onclick=()=>$('setupModal').classList.remove('modal-hidden');$('skip').onclick=()=>{$('enabled').checked=false;$('setupModal').classList.add('modal-hidden');render()};$('save').onclick=()=>{$('enabled').checked=true;$('setupModal').classList.add('modal-hidden');render()};setInterval(()=>{if($('running').checked&&state.scene!=='rest'){$('time').value=Math.min(1439,+$('time').value+1);render()}},1000);render();
+</script>
+</body></html>

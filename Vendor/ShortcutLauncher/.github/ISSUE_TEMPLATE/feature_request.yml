@@ -1,0 +1,83 @@
+name: Feature request
+description: Propose a focused improvement to ShortcutLauncher.
+title: "[Feature] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Explain the user problem before the implementation. Keep examples free of private paths, URLs, launcher configuration, bookmarks, credentials, and other personal data.
+
+  - type: checkboxes
+    id: prerequisites
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched existing issues and discussions for a similar request.
+          required: true
+        - label: This request fits a local-first macOS launcher or a clearly described integration need.
+          required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: User problem
+      description: Who is blocked, in what situation, and what outcome do they need?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior
+      description: Describe observable behavior and acceptance criteria, not only an implementation idea.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Primary area
+      options:
+        - Public integration API
+        - Keyboard and global hotkeys
+        - Application, file, or folder targets
+        - Website targets and icons
+        - Panel and settings UI
+        - Persistence and migration
+        - Accessibility
+        - Documentation or tooling
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: api_impact
+    attributes:
+      label: Public API impact
+      options:
+        - No public API change expected
+        - Additive public API change
+        - Potentially breaking API change
+        - Unsure
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Include current workarounds and why they are insufficient.
+
+  - type: textarea
+    id: privacy
+    attributes:
+      label: Privacy, permissions, and network impact
+      description: State whether the request adds storage, network access, system permissions, telemetry, or new sensitive data.
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context
+      description: Add sanitized mockups, examples, or compatibility constraints.

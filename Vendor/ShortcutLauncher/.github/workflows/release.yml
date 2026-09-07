@@ -1,0 +1,135 @@
+name: Release verified source
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Verify and publish source
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: macos-15
+    timeout-minutes: 40
+    environment: release
+    permissions:
+      contents: write
+
+    steps:
+      # actions/checkout v4.2.2, pinned to an immutable commit. No other
+      # action is needed; packaging and publication use macOS tools and gh.
+      - name: Check out the tagged revision
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Validate the tag and project versions
+        run: |
+          set -euo pipefail
+
+          tag_name="$GITHUB_REF_NAME"
+          if [[ ! "$tag_name" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Release tags must use vMAJOR.MINOR.PATCH: $tag_name" >&2
+            exit 65
+          fi
+
+          release_version="${tag_name#v}"
+          info_plist="HostDemo/Info.plist"
+          project_file="UITestHost/ShortcutLauncherUITestHost.xcodeproj/project.pbxproj"
+          plist_version="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$info_plist")"
+          build_version="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleVersion' "$info_plist")"
+
+          [[ "$plist_version" == "$release_version" ]] \
+            || { echo "Tag $tag_name does not match HostDemo version $plist_version" >&2; exit 65; }
+          [[ "$build_version" =~ ^[1-9][0-9]*$ ]] \
+            || { echo "Invalid HostDemo build number: $build_version" >&2; exit 65; }
+          [[ "$(grep -Fc "MARKETING_VERSION = ${release_version};" "$project_file")" == "2" ]] \
+            || { echo "UITestHost Debug/Release marketing versions do not match $release_version" >&2; exit 65; }
+          [[ "$(grep -Fc "CURRENT_PROJECT_VERSION = ${build_version};" "$project_file")" == "2" ]] \
+            || { echo "UITestHost Debug/Release build versions do not match $build_version" >&2; exit 65; }
+
+          printf 'RELEASE_VERSION=%s\n' "$release_version" >> "$GITHUB_ENV"
+          printf 'RELEASE_BUILD=%s\n' "$build_version" >> "$GITHUB_ENV"
+
+      - name: Enforce first-public-release safety prerequisites
+        run: |
+          set -euo pipefail
+
+          [[ -f LICENSE && ! -L LICENSE ]] \
+            || { echo "Release blocked: a reviewed top-level LICENSE is required." >&2; exit 65; }
+          [[ -f SECURITY.md && ! -L SECURITY.md ]] \
+            || { echo "Release blocked: SECURITY.md is required." >&2; exit 65; }
+
+          set +e
+          PLACEHOLDER_NAMESPACE="$(printf 'com.%s' 'local')"
+          LC_ALL=C grep -R -I -n -F -- "$PLACEHOLDER_NAMESPACE" Sources HostDemo UITestHost
+          namespace_scan_status=$?
+          set -e
+          case "$namespace_scan_status" in
+            0)
+              echo "Release blocked: replace every private placeholder identifier before publication." >&2
+              exit 65
+              ;;
+            1)
+              ;;
+            *)
+              echo "Release blocked: namespace scan failed (grep $namespace_scan_status)." >&2
+              exit 66
+              ;;
+          esac
+
+          if ! LC_ALL=C grep -q -F -- '/security/advisories/new' SECURITY.md; then
+            echo "Release blocked: SECURITY.md must document the private vulnerability-reporting route." >&2
+            exit 65
+          fi
+
+      - name: Package source and run the release delivery gate
+        run: |
+          set -euo pipefail
+
+          output_parent="$(mktemp -d "$RUNNER_TEMP/shortcut-launcher-release-output.XXXXXX")"
+          SHORTCUT_LAUNCHER_VERSION="$RELEASE_VERSION" \
+          SHORTCUT_LAUNCHER_BUILD_VERSION="$RELEASE_BUILD" \
+            /bin/zsh ./scripts/package-source.sh "$output_parent"
+          release_directory="$output_parent/ShortcutLauncher-${RELEASE_VERSION}-release"
+          [[ -d "$release_directory" ]] \
+            || { echo "Expected release directory was not created: $release_directory" >&2; exit 66; }
+          printf 'ARTIFACT_DIRECTORY=%s\n' "$release_directory" >> "$GITHUB_ENV"
+
+      - name: Publish or update the GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+
+          release_assets=(
+            "$ARTIFACT_DIRECTORY/ShortcutLauncher-${RELEASE_VERSION}-source.zip"
+            "$ARTIFACT_DIRECTORY/ShortcutLauncher-${RELEASE_VERSION}-AI_CONTEXT.md"
+            "$ARTIFACT_DIRECTORY/SOURCE_MANIFEST.md"
+            "$ARTIFACT_DIRECTORY/VERIFICATION.md"
+            "$ARTIFACT_DIRECTORY/verification.log"
+            "$ARTIFACT_DIRECTORY/ShortcutLauncher-${RELEASE_VERSION}-SHA256SUMS.txt"
+          )
+
+          if gh release view "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            gh release upload "$GITHUB_REF_NAME" "${release_assets[@]}" \
+              --repo "$GITHUB_REPOSITORY" \
+              --clobber
+          else
+            gh release create "$GITHUB_REF_NAME" "${release_assets[@]}" \
+              --repo "$GITHUB_REPOSITORY" \
+              --verify-tag \
+              --title "ShortcutLauncher ${GITHUB_REF_NAME}" \
+              --generate-notes
+          fi
+
+      # Developer ID signing and notarization are intentionally absent. They
+      # belong in a separate protected workflow only if binary apps are shipped.

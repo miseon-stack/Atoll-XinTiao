@@ -1,0 +1,3 @@
+# Media assets are stored as regular Git blobs in the public repository.
+# Every bundled file is below GitHub's 100 MB per-file limit, which keeps a
+# fresh clone self-contained and avoids requiring Git LFS for first-time users.

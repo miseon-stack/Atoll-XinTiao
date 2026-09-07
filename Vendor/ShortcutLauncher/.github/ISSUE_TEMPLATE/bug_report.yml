@@ -1,0 +1,87 @@
+name: Bug report
+description: Report a reproducible ShortcutLauncher defect.
+title: "[Bug] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve ShortcutLauncher. For a security vulnerability, follow `SECURITY.md` instead of filing a public issue. Never attach launcher configuration files, bookmarks, private URLs, personal paths, credentials, or website-icon assets.
+
+  - type: checkboxes
+    id: prerequisites
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched existing issues for the same problem.
+          required: true
+        - label: This report does not disclose a security vulnerability or private user data.
+          required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Version or commit
+      description: For example, v0.6.0 or a full commit SHA.
+      placeholder: v0.6.0
+    validations:
+      required: true
+
+  - type: input
+    id: environment
+    attributes:
+      label: macOS and toolchain
+      description: Include the macOS version and, for build failures, Xcode and Swift versions.
+      placeholder: macOS 14.7; Xcode 16.2; Swift 6.0
+    validations:
+      required: true
+
+  - type: dropdown
+    id: integration
+    attributes:
+      label: Integration mode
+      options:
+        - HostDemo
+        - Embedded ShortcutLauncherCore and ShortcutLauncherUI
+        - Package build or tests
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Reproduction steps
+      description: Provide the smallest deterministic sequence that reproduces the issue.
+      placeholder: |
+        1. Start with …
+        2. Open …
+        3. Observe …
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Sanitized diagnostics
+      description: Paste only minimal, reviewed output. Replace private paths, URLs, names, and identifiers.
+      render: shell
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context
+      description: Add sanitized screenshots or details that materially help reproduce the problem.
