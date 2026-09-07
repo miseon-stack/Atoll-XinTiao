@@ -20,9 +20,9 @@
 	<key>SUEnableInstallerLauncherService</key>
 	<true/>
 	<key>SUFeedURL</key>
-	<string>https://raw.githubusercontent.com/Ebullioscopic/Atoll/main/Updates/appcast.xml</string>
+	<string>https://raw.githubusercontent.com/miseon-stack/Atoll-XinTiao/main/Updates/appcast.xml</string>
 	<key>SUPublicEDKey</key>
-	<string>q2YQaJ1umGkaIJWMGN9Isj5fx/YlUtxnzHEBqFtfZcg=</string>
+	<string>3n7A+IQtyB5hsiTwwP33gNOd0mUmo7g+pTURXCxvJDE=</string>
 	<key>UTExportedTypeDeclarations</key>
 	<array>
 		<dict>

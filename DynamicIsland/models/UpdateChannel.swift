@@ -50,7 +50,7 @@ enum UpdateChannel: String, CaseIterable, Identifiable, Codable, Defaults.Serial
     }
 
     var feedURL: URL {
-        let base = "https://raw.githubusercontent.com/Ebullioscopic/Atoll/main/Updates"
+        let base = "https://raw.githubusercontent.com/miseon-stack/Atoll-XinTiao/main/Updates"
         switch self {
         case .stable:  return URL(string: "\(base)/appcast.xml")!
         case .beta:    return URL(string: "\(base)/appcast-beta.xml")!
