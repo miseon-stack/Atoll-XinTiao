@@ -1,15 +1,21 @@
 # Changelog
 
-All notable changes to Atoll will be documented in this file.
+Changes to Work Tempo and the inherited Atoll release history are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Branding — 2026-09-08
+- Renamed the user-facing application and public repository to **Work Tempo** / `miseon-stack/work-tempo`.
+- Applied the maintainer-approved blue-green notch-and-rhythm icon (candidate 5) to application channels, onboarding, the menu bar, and README.
+- Updated product copy and repository/update links while retaining existing Bundle IDs, settings, file permissions, data directories, extension protocols, and update-signing keys.
+- Prevented a pending Downloads-folder permission decision from blocking the entire app at launch; monitoring waits off the main thread and still respects system authorization and the feature toggle.
+
 ### Added
 - **ShortcutLauncher 0.6.0 integration**: bind and launch applications, websites, files, and folders from an in-process quick-launch panel with persistent configuration, icon handling, import/export, shortcut-conflict recovery, and restart-safe data recovery. Open it with **Control + Option + Q**, the keyboard-shaped button in the expanded notch header, the notch extras menu, the menu-bar menu, or **Settings → Shortcuts**.
-- Added public source-build, licensing, attribution, and private vulnerability-reporting documentation for `miseon-stack/Atoll-XinTiao`.
+- Added public source-build, licensing, attribution, and private vulnerability-reporting documentation for `miseon-stack/work-tempo`.
 
 - **Fingerprint lock screen activity**: choose the lock, an animated fingerprint scan, or both from Lock Screen settings. The fingerprint uses an attributed Lottie animation and completes its green scan while the Mac unlocks. (#774)
 

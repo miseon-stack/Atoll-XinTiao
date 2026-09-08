@@ -65,7 +65,7 @@ struct UpdateFoundView: View {
                 }
 
                 // Title
-                Text("A new version of Atoll is available!")
+                Text("A new version of Work Tempo is available!")
                     .font(.headline)
                     .multilineTextAlignment(.center)
 

@@ -1,8 +1,8 @@
 # ShortcutLauncher integration
 
-Atoll × 薪跳 embeds ShortcutLauncher 0.6.0 as the local Swift package at `Vendor/ShortcutLauncher`. The app target links only `ShortcutLauncherCore` and `ShortcutLauncherUI`; the package's HostDemo and integration fixture are verification products and are not embedded or published as a second application.
+Work Tempo embeds ShortcutLauncher 0.6.0 as the local Swift package at `Vendor/ShortcutLauncher`. The app target links only `ShortcutLauncherCore` and `ShortcutLauncherUI`; the package's HostDemo and integration fixture are verification products and are not embedded or published as a second application.
 
-The integrated ShortcutLauncher source and its Atoll host integration are Copyright (C) 2026 miseon-stack and are distributed with [miseon-stack/Atoll-XinTiao](https://github.com/miseon-stack/Atoll-XinTiao) under GNU GPL v3.0. See the repository's `LICENSE` and `NOTICE` files for the applicable terms and upstream attribution.
+The integrated ShortcutLauncher source and its Atoll host integration are Copyright (C) 2026 miseon-stack and are distributed with [miseon-stack/work-tempo](https://github.com/miseon-stack/work-tempo) under GNU GPL v3.0. See the repository's `LICENSE` and `NOTICE` files for the applicable terms and upstream attribution.
 
 ## Host boundary
 
@@ -29,7 +29,7 @@ Atoll currently has App Sandbox disabled. The module still stores local targets 
 
 The public repository currently distributes source code only. It does not provide a miseon-stack-signed and Apple-notarized Atoll app or DMG. Developers should build the `main` branch with Xcode 16 or later and a Swift 6 toolchain, using their own signing identity. Bundled media assets are committed as ordinary Git files, so a normal clone or source archive is complete without Git LFS.
 
-Security issues affecting the host integration or ShortcutLauncher should be reported through the repository's [private vulnerability reporting form](https://github.com/miseon-stack/Atoll-XinTiao/security/advisories/new), not a public issue.
+Security issues affecting the host integration or ShortcutLauncher should be reported through the repository's [private vulnerability reporting form](https://github.com/miseon-stack/work-tempo/security/advisories/new), not a public issue.
 
 ## Upgrade procedure
 

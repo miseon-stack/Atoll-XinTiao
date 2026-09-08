@@ -41,7 +41,7 @@ struct WelcomeView: View {
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 100, height: 100)
                         .padding(.bottom, 8)
-                    Text("Atoll")
+                    Text("Work Tempo")
                         .font(.system(.largeTitle, design: .default))
                         .fontWeight(.semibold)
                     Text("Welcome")
@@ -76,11 +76,11 @@ struct WelcomeView: View {
                     
                     // Privacy Policy Link
                     Button(action: {
-                        if let url = URL(string: "https://ebullioscopic.github.io/DynamicIsland/privacy-policy") {
+                        if let url = URL(string: "https://github.com/miseon-stack/work-tempo#data-and-permissions") {
                             NSWorkspace.shared.open(url)
                         }
                     }) {
-                        Text("Privacy Policy")
+                        Text("Privacy & Permissions")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
@@ -90,10 +90,9 @@ struct WelcomeView: View {
                 .padding(.top)
             }
             
-            Image("ebullioscopic")
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(height: 22)
+            Text("Work Tempo · miseon-stack")
+                .font(.caption)
+                .foregroundStyle(.secondary)
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
                 .padding()
                 .padding(.bottom, 36)

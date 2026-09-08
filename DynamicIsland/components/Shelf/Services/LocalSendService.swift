@@ -599,7 +599,7 @@ final class LocalSendService: NSObject, ObservableObject {
 
     private func sendAnnouncement() {
         let payload: [String: Any] = [
-            "alias": Host.current().localizedName ?? "Atoll",
+            "alias": Host.current().localizedName ?? "Work Tempo",
             "version": "2.1",
             "deviceModel": "Mac",
             "deviceType": "desktop",
@@ -726,7 +726,7 @@ final class LocalSendService: NSObject, ObservableObject {
             }
 
             let responseJSON: [String: Any] = [
-                "alias": Host.current().localizedName ?? "Atoll",
+                "alias": Host.current().localizedName ?? "Work Tempo",
                 "version": "2.1",
                 "deviceModel": "Mac",
                 "deviceType": "desktop",
@@ -740,7 +740,7 @@ final class LocalSendService: NSObject, ObservableObject {
 
         if method == "GET", path == "/api/localsend/v2/info" {
             let responseJSON: [String: Any] = [
-                "alias": Host.current().localizedName ?? "Atoll",
+                "alias": Host.current().localizedName ?? "Work Tempo",
                 "version": "2.1",
                 "deviceModel": "Mac",
                 "deviceType": "desktop",
@@ -887,7 +887,7 @@ final class LocalSendService: NSObject, ObservableObject {
 
         let payload: [String: Any] = [
             "info": [
-                "alias": Host.current().localizedName ?? "Atoll",
+                "alias": Host.current().localizedName ?? "Work Tempo",
                 "version": "2.1",
                 "deviceModel": "Mac",
                 "deviceType": "desktop",

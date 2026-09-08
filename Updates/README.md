@@ -1,6 +1,6 @@
 # Update signing
 
-The Sparkle feeds in this directory belong to the `miseon-stack/Atoll-XinTiao`
+The Sparkle feeds in this directory belong to the `miseon-stack/work-tempo`
 distribution. They intentionally contain no release items until the first
 binary has been signed with the matching private key and notarized by Apple.
 

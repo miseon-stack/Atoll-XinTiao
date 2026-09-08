@@ -13,7 +13,7 @@ APPCASTS = (
     ROOT / "Updates" / "appcast-alpha.xml",
     ROOT / "Updates" / "appcast-nightly.xml",
 )
-PUBLIC_REPOSITORY = "miseon-stack/Atoll-XinTiao"
+PUBLIC_REPOSITORY = "miseon-stack/work-tempo"
 SPARKLE_PUBLIC_KEY = "3n7A+IQtyB5hsiTwwP33gNOd0mUmo7g+pTURXCxvJDE="
 
 

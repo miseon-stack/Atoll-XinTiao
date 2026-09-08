@@ -270,7 +270,7 @@ final class MediaKeyInterceptor {
 
         switch MediaKeyTapRetryPolicy.step(attempt: retryAttempts, elapsed: elapsed) {
         case .giveUp:
-            NSLog("⚠️ Giving up on media key interception; grant Accessibility and reopen Atoll")
+            NSLog("⚠️ Giving up on media key interception; grant Accessibility and reopen Work Tempo")
             cancelTapRetry()
             return
         case .backOff:

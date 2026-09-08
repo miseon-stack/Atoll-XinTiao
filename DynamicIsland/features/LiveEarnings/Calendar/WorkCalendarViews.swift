@@ -376,11 +376,11 @@ struct NotchWorkCalendarView: View {
                 Button(role: .destructive) {
                     showsBulkDeletionConfirmation = true
                 } label: {
-                    Label(String(localized: "Clear All Atoll Items"), systemImage: "trash")
+                    Label(String(localized: "Clear All Work Tempo Items"), systemImage: "trash")
                 }
                 .controlSize(.small)
                 .disabled(calendarManager.atollManagedCalendarItemCount == 0)
-                .help(String(localized: "Only items created by Atoll are deleted."))
+                .help(String(localized: "Only items created by Work Tempo are deleted."))
                 Button(String(localized: "Done")) {
                     coordinator.currentView = .home
                 }
@@ -822,12 +822,12 @@ struct NotchWorkCalendarView: View {
                 .contentShape(Rectangle())
 
             VStack(alignment: .leading, spacing: 14) {
-                Label(String(localized: "Clear all Atoll events and to-dos?"), systemImage: "trash")
+                Label(String(localized: "Clear all Work Tempo events and to-dos?"), systemImage: "trash")
                     .font(.headline)
                     .foregroundStyle(.red)
                 Text(
                     String.localizedStringWithFormat(
-                        String(localized: "This will delete %lld items created by Atoll."),
+                        String(localized: "This will delete %lld items created by Work Tempo."),
                         calendarManager.atollManagedCalendarItemCount
                     )
                 )
@@ -1140,12 +1140,12 @@ struct NotchWorkCalendarView: View {
 
         if result.failed == 0 {
             message = String.localizedStringWithFormat(
-                String(localized: "Deleted %lld Atoll items."),
+                String(localized: "Deleted %lld Work Tempo items."),
                 result.deleted
             )
         } else {
             message = String.localizedStringWithFormat(
-                String(localized: "Deleted %lld Atoll items; %lld could not be deleted."),
+                String(localized: "Deleted %lld Work Tempo items; %lld could not be deleted."),
                 result.deleted,
                 result.failed
             )

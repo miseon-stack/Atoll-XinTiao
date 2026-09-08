@@ -1,9 +1,9 @@
-Atoll (DynamicIsland) - NOTICE
+Work Tempo - NOTICE
 
-Atoll × 薪跳 modifications
+Work Tempo modifications
 
 Copyright (C) 2026 miseon-stack
-https://github.com/miseon-stack/Atoll-XinTiao
+https://github.com/miseon-stack/work-tempo
 
 This repository contains a modified version of Atoll that integrates
 live earnings, work-calendar, task/event, capture, recording, and
@@ -21,7 +21,7 @@ distributed as part of this repository under GNU GPL v3.0. Its license
 text is available in Vendor/ShortcutLauncher/LICENSE; the repository-wide
 license text is available in LICENSE. The HostDemo and integration test
 fixture are source-level verification products and are not distributed as
-a second macOS application by Atoll × 薪跳.
+a second macOS application by Work Tempo.
 
 This product includes software derived from the boring.notch project,
 modified and adapted for Atoll (DynamicIsland). The boring.notch project
@@ -35,3 +35,10 @@ FingerprintScan.json is the "Fingerprint Scan" animation by Eddy Gann,
 downloaded from LottieFiles and used under the Lottie Simple License:
 https://lottiefiles.com/free-animation/fingerprint-scan-VQf6EWRtkS
 https://lottiefiles.com/page/license
+
+Work Tempo product icon
+
+The blue-green notch-and-rhythm icon was generated with AI assistance for
+this project and selected by the maintainer as candidate 5 on 2026-09-08.
+The approved source is .github/assets/work-tempo-icon.png. Application icon
+sizes are derived from that same source; this is not the original Atoll logo.

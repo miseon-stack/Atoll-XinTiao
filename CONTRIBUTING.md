@@ -42,7 +42,7 @@ We are committed to fostering a welcoming and inclusive environment. Please read
 	- MacBook with a notch (for full feature testing)
 - **Clone the repo:**
 	```bash
-	git clone https://github.com/Ebullioscopic/Atoll.git
+	git clone https://github.com/miseon-stack/work-tempo.git
 	cd Atoll
 	open DynamicIsland.xcodeproj
 	```

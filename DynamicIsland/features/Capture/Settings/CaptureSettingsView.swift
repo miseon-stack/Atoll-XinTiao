@@ -33,7 +33,7 @@ struct CaptureSettingsView: View {
             }
 
             Section(String(localized: "Behavior")) {
-                Toggle(String(localized: "Exclude Atoll from captures"), isOn: $preferences.excludesAtollFromCapture)
+                Toggle(String(localized: "Exclude Work Tempo from captures"), isOn: $preferences.excludesAtollFromCapture)
                 Toggle(String(localized: "Show completion notifications"), isOn: $preferences.completionNotificationsEnabled)
             }
 

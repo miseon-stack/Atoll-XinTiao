@@ -8,19 +8,19 @@
 		<true/>
 	</dict>
 	<key>NSAppleMusicUsageDescription</key>
-	<string>Atoll uses Apple Music to fetch animated artwork for the lock screen wallpaper.</string>
+	<string>Work Tempo uses Apple Music to fetch animated artwork for the lock screen wallpaper.</string>
 	<key>NSAudioCaptureUsageDescription</key>
-	<string>Atoll uses system audio when you choose to include sound in a screen recording, and for the real-time music waveform visualizer.</string>
+	<string>Work Tempo uses system audio when you choose to include sound in a screen recording, and for the real-time music waveform visualizer.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Atoll uses the microphone only when you enable microphone audio for a screen recording.</string>
+	<string>Work Tempo uses the microphone only when you enable microphone audio for a screen recording.</string>
 	<key>NSScreenCaptureUsageDescription</key>
-	<string>Atoll needs access to screen content when you create screenshots or screen recordings.</string>
+	<string>Work Tempo needs access to screen content when you create screenshots or screen recordings.</string>
 	<key>SUEnableDownloaderService</key>
 	<true/>
 	<key>SUEnableInstallerLauncherService</key>
 	<true/>
 	<key>SUFeedURL</key>
-	<string>https://raw.githubusercontent.com/miseon-stack/Atoll-XinTiao/main/Updates/appcast.xml</string>
+	<string>https://raw.githubusercontent.com/miseon-stack/work-tempo/main/Updates/appcast.xml</string>
 	<key>SUPublicEDKey</key>
 	<string>3n7A+IQtyB5hsiTwwP33gNOd0mUmo7g+pTURXCxvJDE=</string>
 	<key>UTExportedTypeDeclarations</key>

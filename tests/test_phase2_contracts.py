@@ -192,7 +192,7 @@ class Phase2ContractTests(unittest.TestCase):
         self.assertIn("atollManagedCalendarItemCount", manager)
         self.assertIn("deleteAllAtollManagedCalendarItems()", manager)
         self.assertIn("showsBulkDeletionConfirmation", notch_calendar)
-        self.assertIn('String(localized: "Clear All Atoll Items")', notch_calendar)
+        self.assertIn('String(localized: "Clear All Work Tempo Items")', notch_calendar)
         self.assertIn("case restDay", (ROOT / "DynamicIsland" / "features" / "LiveEarnings" / "Calendar" / "WorkCalendarModels.swift").read_text())
         self.assertIn("func createEvent(title:", service)
         self.assertIn("func createReminder(title:", service)

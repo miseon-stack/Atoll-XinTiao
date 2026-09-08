@@ -52,11 +52,11 @@ final class AtollShortcutLauncherService: ObservableObject {
             case .incompatibleConfiguration(let version):
                 return "The Quick Launcher data was created by a newer version (schema \(version)) and was left unchanged."
             case .duplicateModule:
-                return "Another Quick Launcher module is already active in this Atoll process."
+                return "Another Quick Launcher module is already active in this Work Tempo process."
             case .storageUnavailable:
-                return "Atoll could not prepare the Quick Launcher data directory. Check disk access and try again."
+                return "Work Tempo could not prepare the Quick Launcher data directory. Check disk access and try again."
             case .unknown:
-                return "Quick Launcher could not start. You can retry from Atoll Settings."
+                return "Quick Launcher could not start. You can retry from Work Tempo Settings."
             }
         }
     }

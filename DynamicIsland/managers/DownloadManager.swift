@@ -20,6 +20,7 @@ import Foundation
 import SwiftUI
 import Observation
 import Defaults
+import Combine
 
 @Observable
 @MainActor
@@ -32,6 +33,9 @@ class DownloadManager {
     private let coordinator = DynamicIslandViewCoordinator.shared
     private var source: DispatchSourceFileSystemObject?
     private let queue = DispatchQueue(label: "com.dynamicisland.downloads.monitor", qos: .utility)
+    private var monitoringTask: Task<Void, Never>?
+    private var monitoringGeneration = UUID()
+    private var preferenceSubscription: AnyCancellable?
     private var completionTimer: Timer?
     private var hasPerformedInitialScan: Bool = false
     private var initialCrDownloadFiles: Set<String> = []
@@ -43,10 +47,9 @@ class DownloadManager {
     }
     
     init() {
-        requestDownloadsPermissionIfNeeded()
         startMonitoringIfNeeded()
         
-        Defaults.publisher(.enableDownloadListener)
+        preferenceSubscription = Defaults.publisher(.enableDownloadListener)
             .sink { [weak self] _ in
                 guard let self else { return }
                 Task { @MainActor in
@@ -65,7 +68,7 @@ class DownloadManager {
     }
     
     private func startMonitoring() {
-        guard source == nil, let downloadsDirectory else { return }
+        guard source == nil, monitoringTask == nil, let downloadsDirectory else { return }
         
         hasPerformedInitialScan = false
         initialCrDownloadFiles.removeAll()
@@ -73,31 +76,50 @@ class DownloadManager {
         ignoredFiles.removeAll()
         isDownloading = false
         
-        let path = downloadsDirectory.path
-        let fd = open(path, O_EVTONLY)
-        guard fd >= 0 else { return }
-        
-        let src = DispatchSource.makeFileSystemObjectSource(
-            fileDescriptor: fd,
-            eventMask: [.write, .rename, .delete, .attrib],
-            queue: queue
-        )
-        
-        src.setEventHandler { [weak self] in
-            self?.scanDownloadsDirectory()
+        let generation = UUID()
+        monitoringGeneration = generation
+        // macOS may wait for a fresh permission decision after an app is rebuilt
+        // or renamed. Never let that filesystem wait block application launch.
+        monitoringTask = Task { [weak self] in
+            let fd = await Task.detached(priority: .utility) {
+                open(downloadsDirectory.path, O_EVTONLY)
+            }.value
+            guard let self else {
+                if fd >= 0 { close(fd) }
+                return
+            }
+            guard !Task.isCancelled, self.monitoringGeneration == generation,
+                  Defaults[.enableDownloadListener] else {
+                if fd >= 0 { close(fd) }
+                return
+            }
+            self.monitoringTask = nil
+            guard fd >= 0 else { return }
+            let src = DispatchSource.makeFileSystemObjectSource(
+                fileDescriptor: fd,
+                eventMask: [.write, .rename, .delete, .attrib],
+                queue: self.queue
+            )
+            let scan: @Sendable () -> Void = { [weak self] in
+                guard let files = Self.downloadFiles(in: downloadsDirectory) else { return }
+                Task { @MainActor [weak self] in
+                    guard let self, self.monitoringGeneration == generation,
+                          self.source != nil, Defaults[.enableDownloadListener] else { return }
+                    self.processDownloadFiles(files.inProgress, allFiles: files.all)
+                }
+            }
+            src.setEventHandler(handler: scan)
+            src.setCancelHandler { close(fd) }
+            self.source = src
+            src.resume()
+            self.queue.async(execute: scan)
         }
-        
-        src.setCancelHandler {
-            close(fd)
-        }
-        
-        source = src
-        src.resume()
-        
-        scanDownloadsDirectory()
     }
     
     private func stopMonitoring() {
+        monitoringGeneration = UUID()
+        monitoringTask?.cancel()
+        monitoringTask = nil
         source?.cancel()
         source = nil
         
@@ -107,8 +129,7 @@ class DownloadManager {
         isDownloading = false
     }
     
-    private func scanDownloadsDirectory() {
-        guard let downloadsDirectory else { return }
+    nonisolated static func downloadFiles(in downloadsDirectory: URL) -> (inProgress: Set<String>, all: Set<String>)? {
         
         let crDownloadFiles: Set<String>
         let allFiles: Set<String>
@@ -130,12 +151,9 @@ class DownloadManager {
             allFiles = Set(contents.map { $0.lastPathComponent })
             
         } catch {
-            return
+            return nil
         }
-        
-        Task { @MainActor in
-            self.processDownloadFiles(crDownloadFiles, allFiles: allFiles)
-        }
+        return (crDownloadFiles, allFiles)
     }
     
     private func processDownloadFiles(_ crDownloadFiles: Set<String>, allFiles: Set<String>) {
@@ -186,11 +204,6 @@ class DownloadManager {
         } else if hasActiveDownloads {
             updateDownloadingState(isActive: true)
         }
-    }
-    
-    private func requestDownloadsPermissionIfNeeded() {
-        guard let downloadsDirectory else { return }
-        _ = try? FileManager.default.contentsOfDirectory(at: downloadsDirectory, includingPropertiesForKeys: nil)
     }
     
     private func updateDownloadingState(isActive: Bool) {

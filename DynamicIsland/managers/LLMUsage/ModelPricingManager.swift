@@ -56,7 +56,7 @@ class ModelPricingManager: ObservableObject {
     
     @Published private(set) var pricingData: ModelPricingData?
     
-    private let remoteURL = URL(string: "https://raw.githubusercontent.com/Ebullioscopic/Atoll/feat/dynamic-pricing-workflow/DynamicIsland/managers/LLMUsage/pricing.json")!
+    private let remoteURL = URL(string: "https://raw.githubusercontent.com/miseon-stack/work-tempo/main/DynamicIsland/managers/LLMUsage/pricing.json")!
     
     private init() {
         loadInitialPricing()

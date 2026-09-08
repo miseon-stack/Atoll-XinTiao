@@ -106,7 +106,7 @@ actor CaptureFileStore {
         formatter.locale = Locale(identifier: "en_US_POSIX")
         formatter.calendar = Calendar(identifier: .gregorian)
         formatter.dateFormat = "yyyy-MM-dd HH-mm-ss"
-        let label = kind == .screenshot ? "Atoll Screenshot" : "Atoll Recording"
+        let label = kind == .screenshot ? "Work Tempo Screenshot" : "Work Tempo Recording"
         let base = "\(label) \(formatter.string(from: Date()))"
         var candidate = folder.appendingPathComponent("\(base).\(fileExtension)")
         var suffix = 2

@@ -1,4 +1,4 @@
-# Atoll × 薪跳修改说明
+# Work Tempo修改说明
 
 本仓库是 [Ebullioscopic/Atoll](https://github.com/Ebullioscopic/Atoll) 的修改版本，保留原项目的 Git 历史、作者署名、许可证和第三方致谢。
 
@@ -20,4 +20,4 @@
 
 - 项目：Atoll
 - 上游仓库：<https://github.com/Ebullioscopic/Atoll>
-- 本项目仓库：<https://github.com/miseon-stack/Atoll-XinTiao>
+- 本项目仓库：<https://github.com/miseon-stack/work-tempo>
