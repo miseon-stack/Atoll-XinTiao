@@ -41,7 +41,15 @@ open -a "Work Tempo" /path/to/file
 
 ## 获取与构建
 
-**当前提供源码，尚未提供经本项目正式签名并完成 Apple 公证的安装包，也未在 Mac App Store 上架。** GitHub 的源码 ZIP 不是可直接安装的 macOS 应用。
+**现提供 2.3.3-beta.1 公开试用包（Apple Silicon / M 系列 Mac），尚未完成 Developer ID 签名与 Apple 公证，也未在 Mac App Store 上架。** 首次打开可能被 macOS 拦截；其他 Mac 与最低系统的实机验证仍待完成，请先阅读安装说明。
+
+- [中文官网与下载入口](https://work-tempo.adonisghenry.chatgpt.site)
+- [试用版安装包、源码和校验值](https://github.com/miseon-stack/work-tempo/releases/tag/v2.3.3-beta.1)
+- [安装与试用说明](docs/beta-installation.md) · [本机验证记录与已知限制](docs/beta-validation.md)
+
+普通用户下载 `.dmg`，打开后拖入“应用程序”。GitHub 的源码 ZIP 不是可直接安装的软件。本试用版手动下载更新，暂未开放自动更新；不要为安装关闭系统安全保护。
+
+以下步骤供希望自行构建的开发者使用：
 
 ```bash
 git clone --branch main --single-branch https://github.com/miseon-stack/work-tempo.git

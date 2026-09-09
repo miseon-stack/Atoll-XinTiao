@@ -164,6 +164,23 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return false
     }
 
+    func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
+        guard !AppRuntimeEnvironment.isTesting, !LockScreenManager.shared.isLocked else { return false }
+
+        // Menu-bar apps remain running after their panel closes. Reopening the app
+        // must restore a usable panel, including while a capture HUD is visible.
+        cancelPendingNotchAutoClose()
+        restoreWindowsAfterLock()
+        reassertDynamicIslandWindowSpacePresence()
+
+        let screen = NSScreen.screens.first { $0.frame.contains(NSEvent.mouseLocation) }
+        let target = Defaults[.showOnAllDisplays]
+            ? screen.flatMap { viewModels[$0] } ?? viewModels.values.first ?? vm
+            : vm
+        target.open()
+        return false
+    }
+
     func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
         if AppRuntimeEnvironment.isUnitTesting { return .terminateNow }
 

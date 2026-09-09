@@ -704,7 +704,8 @@ struct ContentView: View {
                         handleHover(hovering)
                     }
                     .onTapGesture {
-                        guard !recordingOpenGestureLocked else { return }
+                        // A system-wide capture indicator must not lock access to the app.
+                        // Recording buttons handle their own taps; the remaining surface opens it.
                         if handleClosedMusicWaveformTapIfNeeded() {
                             return
                         }
@@ -2573,7 +2574,6 @@ struct ContentView: View {
 
     private func handleOpenScrollGesture(translation: CGFloat, phase: NSEvent.Phase) {
         guard vm.notchState == .closed else { return }
-        guard !recordingOpenGestureLocked else { return }
 
         withAnimation(.smooth) {
             gestureProgress = (translation / Defaults[.gestureSensitivity]) * 20
